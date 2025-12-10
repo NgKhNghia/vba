@@ -22,13 +22,13 @@ Dim ws As Worksheet
 Function SheetExists(wb As Workbook, sheetName As String) As Boolean
 ' kiem tra su ton tai cua cac sheet
     On Error Resume Next
-'    ws = Nothing
     Set ws = wb.Sheets(sheetName)
     SheetExists = Not ws Is Nothing And ws.name = sheetName
     On Error GoTo 0
 End Function
 
 Sub Refresh()
+' bo loc, bo an
     wsBase.AutoFilterMode = False
     wsDraft.AutoFilterMode = False
     If flag_Msg Then wsMsg.AutoFilterMode = False
@@ -36,6 +36,10 @@ Sub Refresh()
     wsBase.Columns.Hidden = False
     wsDraft.Columns.Hidden = False
     If flag_Msg Then wsMsg.Columns.Hidden = False
+    
+    wsBase.Rows.Hidden = False
+    wsDraft.Rows.Hidden = False
+    If flag_Msg Then wsMsg.Rows.Hidden = False
 End Sub
 
 Sub DeleteEmptyRow()
@@ -58,56 +62,101 @@ Sub DeleteEmptyRow()
 End Sub
 
 Sub ConfirmTitle()
-' xoa bo nhung title thua trong moi sheet
-' do moi sheet co title can xoa khac nhau nen khong the gop code
-    Dim rngDelete As Range
+'' xoa bo nhung title thua trong moi sheet
+'' do moi sheet co title can xoa khac nhau nen khong the gop code
+'    Dim rngDelete As Range
+'
+'    If wsBase.name = "Frame Synthesis" Then
+'        Set rngDelete = wsBase.Columns(10000)
+'        For Each cell In Range(wsBase.Cells(3, 11), wsBase.Cells(3, 11).End(xlToRight))
+'            If cell.Value <> "ADAS" And cell.Value <> "ADAS_Bridge" Then Set rngDelete = Union(rngDelete, cell.EntireColumn)
+'        Next cell
+'        rngDelete.Delete
+'
+'        Set rngDelete = wsDraft.Columns(10000)
+'        For Each cell In Range(wsDraft.Cells(3, 11), wsDraft.Cells(3, 11).End(xlToRight))
+'            If cell.Value <> "ADAS" And cell.Value <> "ADAS_Bridge" Then Set rngDelete = Union(rngDelete, cell.EntireColumn)
+'        Next cell
+'        rngDelete.Delete
+'
+'    ElseIf wsBase.name = "Network Path" Then
+'        Set rngDelete = wsBase.Columns(10000)
+'        For Each cell In Range(wsBase.Cells(3, 6), wsBase.Cells(3, 6).End(xlToRight).Offset(0, -1))
+'            If cell.Value <> "CH2-CAN" And cell.Value <> "CH3-CAN" And cell.Value <> "ITS1-FD" And cell.Value <> "ITS2-FD" And _
+'                cell.Value <> "ITS3-FD" And cell.Value <> "ITS4-FD" And cell.Value <> "ITS5-FD" Then
+'                Set rngDelete = Union(rngDelete, cell.EntireColumn)
+'            End If
+'        Next cell
+'        rngDelete.Delete
+'        If wsBase.Cells(3, 7).Value <> "CH3-CAN" Then
+'            wsBase.Columns(7).Insert shift:=xlToRight
+'            wsBase.Cells(3, 7).Value = "CH3-CAN"
+'        End If
+'
+'        Set rngDelete = wsDraft.Columns(10000)
+'        For Each cell In Range(wsDraft.Cells(3, 6), wsDraft.Cells(3, 6).End(xlToRight).Offset(0, -1))
+'            If cell.Value <> "CH2-CAN" And cell.Value <> "CH3-CAN" And cell.Value <> "ITS1-FD" And cell.Value <> "ITS2-FD" And _
+'                cell.Value <> "ITS3-FD" And cell.Value <> "ITS4-FD" And cell.Value <> "ITS5-FD" Then
+'                Set rngDelete = Union(rngDelete, cell.EntireColumn)
+'            End If
+'        Next cell
+'        rngDelete.Delete
+'        If wsDraft.Cells(3, 7).Value <> "CH3-CAN" Then
+'            wsDraft.Columns(7).Insert shift:=xlToRight
+'            wsDraft.Cells(3, 7).Value = "CH3-CAN"
+'        End If
+'
+'        If flag_Msg Then
+'            If wsMsg.Cells(3, 6).Value <> "CH3-CAN" Then
+'                wsMsg.Columns(6).Insert shift:=xlToRight
+'                wsMsg.Cells(3, 6).Value = "CH3-CAN"
+'            End If
+'        End If
+'    End If
+' =========================================================================
+
+' xac nhan so luong ecu giua base voi draft, thieu thi chen them cot xam
+' xac nhan so luong kenh truyen giua base voi draft, thieu thi chem them cot xam
+'    Dim base_dict As Scripting.Dictionary           ' chi can key;  value khong quan trong
+'    Dim draft_dict As Scripting.Dictionary          ' chi can key;  value khong quan trong
     
-    If wsBase.name = "Frame Synthesis" Then
-        Set rngDelete = wsBase.Columns(10000)
-        For Each cell In Range(wsBase.Cells(3, 11), wsBase.Cells(3, 11).End(xlToRight))
-            If cell.Value <> "ADAS" And cell.Value <> "ADAS_Bridge" Then Set rngDelete = Union(rngDelete, cell.EntireColumn)
-        Next cell
-        rngDelete.Delete
-        
-        Set rngDelete = wsDraft.Columns(10000)
-        For Each cell In Range(wsDraft.Cells(3, 11), wsDraft.Cells(3, 11).End(xlToRight))
-            If cell.Value <> "ADAS" And cell.Value <> "ADAS_Bridge" Then Set rngDelete = Union(rngDelete, cell.EntireColumn)
-        Next cell
-        rngDelete.Delete
-        
-    ElseIf wsBase.name = "Network Path" Then
-        Set rngDelete = wsBase.Columns(10000)
-        For Each cell In Range(wsBase.Cells(3, 6), wsBase.Cells(3, 6).End(xlToRight).Offset(0, -1))
-            If cell.Value <> "CH2-CAN" And cell.Value <> "CH3-CAN" And cell.Value <> "ITS1-FD" And cell.Value <> "ITS2-FD" And _
-                cell.Value <> "ITS3-FD" And cell.Value <> "ITS4-FD" And cell.Value <> "ITS5-FD" Then
-                Set rngDelete = Union(rngDelete, cell.EntireColumn)
+    If InStr(wsBase.name, "Frame Synthesis") Then
+'        ' lay thong tin toan bo ecu
+'        For Each cell In Range(wsBase.Cells(3, 11), wsBase.Cells(3, 11).End(xlToRight))
+'            base_dict.Add cell.Value, cell.Column
+'        Next cell
+'
+'        For Each cell In Range(wsDraft.Cells(3, 11), wsDraft.Cells(3, 11).End(xlToRight))
+'            draft_dict.Add cell.Value, cell.Column
+'        Next cell
+'
+'        ' kiem tra so luong ecu
+'        ' kiem tra ecu cua base co trong draft khong?
+'        For Each cell In Range(wsBase.Cells(3, 11), wsBase.Cells(3, 11).End(xlToRight))
+'            if draft_dict.Exists(cell.Value)
+'        Next cell
+
+
+        wsBase.Cells(2, 11).Formula = "=MATCH(R[1]C,'[" & wbDraft.name & "]Frame Synthesis'!R3C1:R3C" & _
+            wsBase.Cells(3, 11).End(xlToRight).Column & ",0)"
+        Range(wsBase.Cells(2, 11), wsBase.Cells(3, 11).End(xlToRight)).FillRight
+        wsBase.Columns("11:" & wsBase.Cells(3, 11).End(xlToRight).Column).Sort _
+            Key1:=wsBase.Cells(2, 11), _
+            Order1:=xlAscending, _
+            Header:=xlNo, _
+            Orientation:=xlLeftToRight
+        For i = 11 To wsBase.Cells(3, 11).End(xlToRight).Column
+            If wsBase.Cells(2, 0 + i).Value > i Then
+                
+            ElseIf wsBase.Cells(2, 0 + i).Value > i Then
+                
             End If
-        Next cell
-        rngDelete.Delete
-        If wsBase.Cells(3, 7).Value <> "CH3-CAN" Then
-            wsBase.Columns(7).Insert shift:=xlToRight
-            wsBase.Cells(3, 7).Value = "CH3-CAN"
-        End If
+        Next i
         
-        Set rngDelete = wsDraft.Columns(10000)
-        For Each cell In Range(wsDraft.Cells(3, 6), wsDraft.Cells(3, 6).End(xlToRight).Offset(0, -1))
-            If cell.Value <> "CH2-CAN" And cell.Value <> "CH3-CAN" And cell.Value <> "ITS1-FD" And cell.Value <> "ITS2-FD" And _
-                cell.Value <> "ITS3-FD" And cell.Value <> "ITS4-FD" And cell.Value <> "ITS5-FD" Then
-                Set rngDelete = Union(rngDelete, cell.EntireColumn)
-            End If
-        Next cell
-        rngDelete.Delete
-        If wsDraft.Cells(3, 7).Value <> "CH3-CAN" Then
-            wsDraft.Columns(7).Insert shift:=xlToRight
-            wsDraft.Cells(3, 7).Value = "CH3-CAN"
-        End If
         
-        If flag_Msg Then
-            If wsMsg.Cells(3, 6).Value <> "CH3-CAN" Then
-                wsMsg.Columns(6).Insert shift:=xlToRight
-                wsMsg.Cells(3, 6).Value = "CH3-CAN"
-            End If
-        End If
+        
+    ElseIf InStr(wsBase.name, "Network") Then
+        
     End If
 End Sub
 
