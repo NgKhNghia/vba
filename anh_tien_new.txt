@@ -1,0 +1,59 @@
+Sub ConfirmTitlekizon(wsbase As Worksheet, wbdraft As Worksheet)
+    Dim last_column_base As Integer
+    Dim last_column_draft As Integer
+    Dim i As Integer
+    last_column_base = wsbase.Cells(6, wsbase.Columns.Count).End(xlToRight).Column
+    last_column_draft = wsDraft.Cells(6, wsDraft.Columns.Count).End(xlToRight).Column
+    Dim last_ecu_base As Integer
+    Dim last_ecu_draft As Integer
+    For i = last_column_base To 1 Step -1
+            If Left(wsbase.Cells(6, i).Value, 3) = "The" Then
+                last_ecu_base = i
+            Exit For
+            End If
+    Next i
+    For i = last_column_draft To 1 Step -1
+            If Left(wsDraft.Cells(6, i).Value, 3) = "The" Then
+                last_ecu_draft = i
+            Exit For
+            End If
+    Next i
+    Dim last_row_base As Integer
+    Dim last_row_draft As Integer
+    Dim ECUcol1 As Integer
+    Dim ECUcol2 As Integer
+    ECUcol1 = wsbase.Cells.Find(What:="ECU Name", After:=ActiveCell, LookIn:=xlFormulas2, _
+        lookat:=xlWhole, SearchOrder:=xlByRows, SearchDirection:=xlNext, _
+        MatchCase:=True, SearchFormat:=False).Column
+    ECUcol2 = wsDraft.Cells.Find(What:="ECU Name", After:=ActiveCell, LookIn:=xlFormulas2, _
+        lookat:=xlWhole, SearchOrder:=xlByRows, SearchDirection:=xlNext, _
+        MatchCase:=True, SearchFormat:=False).Column
+ 
+    last_row_base = wsbase.Cells(wsbase.Rows.Count, 1).End(xlUp).row
+    last_row_draft = wsDraft.Cells(wsDraft.Rows.Count, 1).End(xlUp).row
+
+    wsbase.Cells(1, ECUcol1).Formula = "=MATCH(R[5]C,'[" & wbdraft.name & "]" & wsbase.name & "'!R5C" & ECUcol2 & ":R5C" & last_ecu_draft & ",0)"
+    Range(wsbase.Cells(1, ECUcol1), wsbase.Cells(1, last_ecu_base)).FillRight
+    For i = ECUcol1 To last_ecu_base
+        If IsError(wsbase.Cells(1, i).Value) Then
+            wsDraft.Columns(i).Insert
+            wsDraft.Cells(6, i).Value = wsbase.Cells(6, i).Value
+            wsDraft.Columns(i).Interior.Color = RGB(191, 191, 191)
+        End If
+    Next i
+    wsDraft.Cells(1, ECUcol2).Formula = "=MATCH(R[5]C,'[" & wbdraft.name & "]" & wsbase.name & "'!R5C" & ECUcol1 & ":R5C" & last_ecu_base & ",0)"
+    Range(wsDraft.Cells(1, ECUcol2), wsDraft.Cells(1, last_ecu_draft)).FillRight
+    For i = ECUcol2 To last_ecu_draft
+        If IsError(wsbase.Cells(1, i).Value) Then
+            wsbase.Columns(i).Insert
+            wsbase.Cells(6, i).Value = wsDraft.Cells(6, i).Value
+            wsbase.Columns(i).Interior.Color = RGB(191, 191, 191)
+        End If
+    Next i
+    wsDraft.Columns(1).Resize(, wsDraft.Cells(1, Columns.Count).End(xlToLeft).Column).Sort _
+        Key1:=wsDraft.Cells(1, 1), _
+        Order1:=xlAscending, _
+        Orientation:=xlLeftToRight, _
+        Header:=xlNo
+End Sub
+ 
