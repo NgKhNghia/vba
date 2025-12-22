@@ -56,4 +56,39 @@ Sub ConfirmTitlekizon(wsbase As Worksheet, wbdraft As Worksheet)
         Orientation:=xlLeftToRight, _
         Header:=xlNo
 End Sub
+
+
+
+'=============================================================================
+Sub sumary_adas3(ws_check As Worksheet, col_start As Integer, col_end As Integer, col_sum As Integer, last_row As Integer)
  
+    Dim i As Integer
+    Dim Ecu_col As Integer
+    Dim ADAS_col(0 To 2) As Integer
+    Dim countADAS As Integer
+    Dim countT_F As Integer
+ 
+ 
+    
+    For i = col_start To col_end
+        If ws_check.Cells(6, i).Value = "Ecu Name" Then
+            Ecu_col = i
+            Exit For
+        End If
+    Next i
+    countADAS = 0
+    For i = Ecu_col To col_end
+        If Left(ws_check.Cells(6, i).Value, 4) = "ADAS" Then
+            If countADAS <= 2 Then
+                ADAS_col(countADAS) = i
+                countADAS = countADAS + 1
+            End If
+            If countADAS = 3 Then
+            Exit For
+            End If
+        End If
+    Next i
+
+
+
+End Sub
