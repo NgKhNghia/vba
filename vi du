@@ -1,0 +1,47 @@
+2026/07/09 14:53 ADAS3.1_H61P 28MY_NATV_Trail - Issues
+指摘 ADAS3.1_H61P 28MY_NATV_Trail
+検索クエリ: 状態:+New
+ビュー: *default*
+#41446: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:138 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41447: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:142 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41448: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:262 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41449: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:282 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41450: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:297 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41451: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:307 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41452: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:312 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41453: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:317 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41454: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:366 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41455: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:436 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41456: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:439 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41457: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:456 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41458: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:490 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+#41459: P: NULLポインタを間接参照する可能性があります。
+C:\Users\knt20359\Desktop\base1\Adas3.1\soft\ADAS31_H61P_Canton_28MY_9SR0A_ADASP002G8_F020\10_source\200_NSWC\HandCode\CAM_RAD\RIR\add_processing.c:559 | NO_PARENT()
+コード: DATAFLOW.2814 | 重要度: QAC-2 (2) | 状態: New | ステータス: Analyze | 分類基準: Perforce QAC for C/C++ チェッカー | オーナー: オーナーなし
+192.168.111.4:8080/review/KwcService?PROJECT=ADAS3_1_H61P_28MY_NATV_Trail&VIEW_ID=1&SEARCH_QUERY=状態%3A%2BNew&SORT_DIRECTION=ASC&SORT_COLUMN=id&FORMAT=PRINT&I… 1/786
