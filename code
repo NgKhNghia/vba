@@ -1,0 +1,30 @@
+import pdfplumber
+
+text = ""
+
+with pdfplumber.open(r"ADAS3.1_H61P 28MY_NATV_Trail - Issues 1.pdf") as pdf:
+    for page in pdf.pages:
+        text += page.extract_text() + "\n"
+        print(text)
+
+with open("report.txt", "w", encoding="utf-8") as f:
+    f.write(text)
+
+
+import re
+
+with open("report.txt", encoding="utf-8") as f:
+    txt = f.read()
+
+records = re.split(r'(?=#\d+:)', txt)
+
+records = [x.strip() for x in records if x.strip()]
+
+
+import pandas as pd
+
+df = pd.DataFrame({
+    "Issue": records
+})
+
+df.to_excel("result.xlsx", index=False)
