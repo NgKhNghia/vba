@@ -1,30 +1,100 @@
 import pdfplumber
+import re
+import pandas as pd
 
+###########################################################################
+# đọc pdf
 text = ""
+
+# xác định vị trí crop
+# with pdfplumber.open("file.pdf") as pdf:
+#     page = pdf.pages[0]
+
+#     print(page.width, page.height)
+
+#     for word in page.extract_words():
+#         print(word["text"], word["top"], word["bottom"])
+
 
 with pdfplumber.open(r"ADAS3.1_H61P 28MY_NATV_Trail - Issues 1.pdf") as pdf:
     for page in pdf.pages:
-        text += page.extract_text() + "\n"
-        print(text)
-
-with open("report.txt", "w", encoding="utf-8") as f:
-    f.write(text)
-
-
-import re
-
-with open("report.txt", encoding="utf-8") as f:
-    txt = f.read()
-
-records = re.split(r'(?=#\d+:)', txt)
-
-records = [x.strip() for x in records if x.strip()]
+        cropped = page.crop((0, 50, page.width, page.height - 40))      # bỏ header và footer
+        page_text = cropped.extract_text()
+        if page_text:
+            text += page_text + "\n"                                  # đọc hết 1 lượt rồi mới xử lý
+        # print(text)
 
 
-import pandas as pd
+###########################################################################
+# xử lý 
+records = re.split(r'(?=^#\d+:)', text, flags=re.MULTILINE)         # regex từng khối theo cách tìm "#" ở đầu dòng
+records = [r.strip() for r in records if r.strip()]
 
-df = pd.DataFrame({
-    "Issue": records
-})
+result = []
 
-df.to_excel("result.xlsx", index=False)
+for record in records:
+    lines = [line.strip() for line in record.splitlines() if line.strip()]
+    if not lines:
+        continue
+
+    item = {
+        "ID": "",
+        "Message": "",
+        "File": "",
+        "Line": "",
+        "Code": "",
+        "Severity": "",
+        "Status": "",
+        "Owner": ""
+    }
+
+    # Dòng đầu: ID và Message   
+    m = re.match(r"#(\d+):\s*(.*)", lines[0])
+
+    if m:
+        item["ID"] = m.group(1)
+        item["Message"] = m.group(2)
+
+    # Các dòng còn lại
+    for line in lines[1:]:
+
+        # path + line
+        if ".c:" in line or ".cpp:" in line:
+            m = re.search(r'^(.*\.(?:c|cpp)):(\d+)\s*\|', line)
+            if m:
+                item["File"] = m.group(1)
+                item["Line"] = m.group(2)
+
+        elif line.startswith("コード:"):
+
+            # Code
+            m = re.search(r'コード:\s*([^|]+)', line)
+            if m:
+                item["Code"] = m.group(1).strip()
+
+            # Severity
+            m = re.search(r'重要度:\s*([^|]+)', line)
+            if m:
+                item["Severity"] = m.group(1).strip()
+
+            # Status
+            m = re.search(r'状態:\s*([^|]+)', line)
+            if m:
+                item["Status"] = m.group(1).strip()
+
+            # Owner
+            m = re.search(r'オーナー:\s*(.+)', line)
+            if m:
+                item["Owner"] = m.group(1).strip()
+
+    result.append(item)
+
+
+###########################################################################
+# xuất ra file excel
+df = pd.DataFrame(result)
+
+df.to_excel(
+    "result.xlsx",
+    index=False
+)
