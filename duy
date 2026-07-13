@@ -1,0 +1,7 @@
+with pdfplumber.open(r"C:\Users\KNT23265\Downloads\Duy\Report_RuntimeSafety.pdf") as pdf:
+    # for page in pdf.pages:
+    tables = pdf.pages[10].extract_tables()
+
+    for table in tables:
+        for row in table:
+            print(row)
