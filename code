@@ -6,8 +6,8 @@ import pandas as pd
 # đọc pdf
 text = ""
 
-# xác định vị trí crop
-# with pdfplumber.open("file.pdf") as pdf:
+# # xác định vị trí crop
+# with pdfplumber.open(r"ADAS3.1_H61P 28MY_NATV_Trail - Issues 1.pdf") as pdf:
 #     page = pdf.pages[0]
 
 #     print(page.width, page.height)
@@ -18,17 +18,21 @@ text = ""
 
 with pdfplumber.open(r"ADAS3.1_H61P 28MY_NATV_Trail - Issues 1.pdf") as pdf:
     for page in pdf.pages:
-        cropped = page.crop((0, 50, page.width, page.height - 40))      # bỏ header và footer
+        cropped = page.crop((0, 30, page.width, page.height - 40))      # bỏ header và footer
         page_text = cropped.extract_text()
         if page_text:
             text += page_text + "\n"                                  # đọc hết 1 lượt rồi mới xử lý
-        # print(text)
+            # print(text)
+        
+        # if page == 3:
+        break
 
 
 ###########################################################################
 # xử lý 
 records = re.split(r'(?=^#\d+:)', text, flags=re.MULTILINE)         # regex từng khối theo cách tìm "#" ở đầu dòng
 records = [r.strip() for r in records if r.strip()]
+records = records[1:]                                               # phần tử đầu không liên quan
 
 result = []
 
@@ -59,13 +63,13 @@ for record in records:
     for line in lines[1:]:
 
         # path + line
-        if ".c:" in line or ".cpp:" in line:
+        if ".c:" in line:
             m = re.search(r'^(.*\.(?:c|cpp)):(\d+)\s*\|', line)
             if m:
                 item["File"] = m.group(1)
                 item["Line"] = m.group(2)
 
-        elif line.startswith("コード:"):
+        elif line.startswith(r"コード:"):
 
             # Code
             m = re.search(r'コード:\s*([^|]+)', line)
