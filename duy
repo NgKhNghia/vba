@@ -1,7 +1,79 @@
-with pdfplumber.open(r"C:\Users\KNT23265\Downloads\Duy\Report_RuntimeSafety.pdf") as pdf:
-    # for page in pdf.pages:
-    tables = pdf.pages[10].extract_tables()
+import pdfplumber
+import re
+import pandas as pd
 
-    for table in tables:
-        for row in table:
-            print(row)
+
+
+
+# # x?c ??nh v? tr? crop
+# with pdfplumber.open(r"C:\Users\KNT23265\Downloads\Duy\Report_RuntimeSafety.pdf") as pdf:
+#     page = pdf.pages[10]
+
+#     print(page.width, page.height)
+
+#     for word in page.extract_words():
+#         print(word["text"], word["top"], word["bottom"])
+
+
+###########################################################################
+# read pdf file
+text = ""
+all_rows = []
+start = False
+first = True
+
+with pdfplumber.open(r"C:\Users\KNT23265\Downloads\Duy\Report_RuntimeSafety.pdf") as pdf:
+    for page in pdf.pages[3:]:                          # skip to table of contents
+        text = page.extract_text() or ""
+
+        if "Chapter 4. Global Variables" in text:       # the end point
+            start = False
+            break
+
+        if "Unproven Run-Time Errors" in text:          # the start point
+            start = True
+
+        if start:
+            if first:                                   # first table
+                # find the cutting position of the first table
+                start_y = None
+                for w in page.extract_words():
+                    if "Unproven" in w["text"]:
+                        start_y = w["bottom"]
+                        break
+                if start_y is None:
+                    continue
+
+                cropped = page.crop((0, start_y, page.width, page.height - 50))
+                tables = cropped.extract_tables()
+                first = False
+            else:                                       # the remaining tables
+                cropped = page.crop((0, 80, page.width, page.height - 50))
+                tables = cropped.extract_tables()
+            
+            for table in tables:                        # merge data         
+                all_rows.extend(table[1:])
+
+        
+
+
+###########################################################################
+# export to excel
+columns = [
+    "ID",
+    "Check",
+    "Function",
+    "Line",
+    "Col",
+    "Detail",
+    "Jus",
+    "Severity",
+    "Status",
+    "Comment"
+]
+df = pd.DataFrame(all_rows, columns=columns)
+df.to_excel("result.xlsx", index=False)
+
+
+###########################################################################
+print("done!")
